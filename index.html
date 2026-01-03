@@ -11,12 +11,11 @@
         
         body {
             margin: 0; overflow: hidden; font-family: 'Outfit', sans-serif;
-            background: #000; /* Yedek arka plan */
+            background: #000;
             color: white;
             height: 100vh; width: 100vw;
         }
 
-        /* --- SONSUZ DÖNGÜ ARKA PLAN EFEKTİ --- */
         #bg-scroller {
             position: fixed; top: 0; left: 0; width: 200%; height: 100%;
             background: url('Background.png') repeat-x;
@@ -29,7 +28,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* --- MODERN CAM TASARIMI --- */
         .glass {
             background: rgba(10, 10, 20, 0.75);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -38,7 +36,6 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
 
-        /* --- NADİRLİK ETİKETLERİ --- */
         .rarity-tag {
             position: absolute; top: 10px; left: 10px;
             padding: 2px 8px; border-radius: 8px; font-size: 0.6rem;
@@ -50,7 +47,6 @@
         .rare-normal { background: #00f260; color: #000; }
         .rare-easy { background: #888; color: #fff; }
 
-        /* --- SİSTEM / ADMİN GÖRSEL DUYURU --- */
         #system-message {
             position: fixed; top: 15%; left: 50%; transform: translateX(-50%) scale(0.8);
             width: 90%; max-width: 400px;
@@ -68,7 +64,6 @@
         }
         .msg-visible { opacity: 1 !important; transform: translateX(-50%) scale(1) !important; }
 
-        /* --- GİRİŞ EKRANI --- */
         #login-screen {
             position: fixed; inset: 0; background: radial-gradient(circle, #1a1a2e, #000);
             z-index: 5000; display: flex; justify-content: center; align-items: center;
@@ -89,7 +84,6 @@
             color: white; font-weight: 900; font-size: 1.1rem; cursor: pointer;
         }
 
-        /* --- OYUN ALANI --- */
         #game-screen { display: none; width: 100%; height: 100%; position: relative; }
 
         #score-board {
@@ -100,7 +94,6 @@
         }
         #score-board span { color: #00f260; }
 
-        /* --- TELEFON & TIKLAMA --- */
         #phone-container {
             position: absolute; top: 52%; left: 50%; transform: translate(-50%, -50%);
             width: 70%; max-width: 280px; height: auto; cursor: pointer; z-index: 10;
@@ -112,7 +105,6 @@
         }
         .squish { transform: scale(0.9) !important; }
 
-        /* --- LUCKY BLOCK EKRANI --- */
         #lucky-opening-overlay {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
             z-index: 6000; justify-content: center; align-items: center; flex-direction: column;
@@ -132,7 +124,6 @@
             filter: drop-shadow(0 0 40px #00f260);
         }
 
-        /* --- BUTONLAR (HUD) --- */
         .hud-btn {
             position: absolute; width: 65px; height: 65px;
             display: flex; justify-content: center; align-items: center;
@@ -142,15 +133,15 @@
         #store-btn { bottom: 30px; right: 30px; background: linear-gradient(135deg, #fceabb, #f8b500); }
         #inventory-btn { bottom: 30px; left: 30px; background: linear-gradient(135deg, #5c258d, #4389a2); }
         #upgrade-btn { bottom: 30px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #11998e, #38ef7d); }
+        #leaderboard-btn { top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); width: 50px; height: 50px;}
         .hud-btn img { width: 35px; }
         
         #admin-btn { 
-            display: none; top: 20px; right: 20px; width: auto; height: auto;
+            display: none; top: 80px; right: 20px; width: auto; height: auto;
             padding: 10px 15px; font-weight: 900; color: white; background: #ff0055;
             border-radius: 12px; font-size: 0.8rem; position: absolute; z-index: 500;
         }
 
-        /* --- MODAL TASARIMLARI --- */
         .modal {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             backdrop-filter: blur(10px); z-index: 4000; justify-content: center; align-items: center;
@@ -181,7 +172,16 @@
 
         .preview-box { display: flex; justify-content: center; gap: 2px; margin-bottom: 5px; }
 
-        /* --- EFEKTLER --- */
+        /* --- LEADERBOARD STYLE --- */
+        .leader-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: rgba(255,255,255,0.05);
+            margin-bottom: 8px; border-radius: 12px; border-left: 4px solid #00f260;
+        }
+        .leader-item:nth-child(1) { background: rgba(255, 215, 0, 0.1); border-color: gold; }
+        .leader-item:nth-child(2) { background: rgba(192, 192, 192, 0.1); border-color: silver; }
+        .leader-item:nth-child(3) { background: rgba(205, 127, 50, 0.1); border-color: #cd7f32; }
+
         .particle {
             position: absolute; width: 8px; height: 8px; border-radius: 50%;
             pointer-events: none; z-index: 20; animation: pAnim 0.6s ease-out forwards;
@@ -235,6 +235,11 @@
 
     <div id="game-screen">
         <div id="admin-btn" onclick="openAdmin()">ADMİN</div>
+        
+        <div id="leaderboard-btn" class="hud-btn" onclick="openLeaderboard()">
+            <img src="https://cdn-icons-png.flaticon.com/512/2817/2817958.png">
+        </div>
+
         <div id="score-board" class="glass">
             <span>$</span><div id="score">0</div>
         </div>
@@ -268,6 +273,15 @@
             <span class="close-modal" onclick="closeInventory()">&times;</span>
             <h2 style="color:#3498db; font-size: 1.5rem;">ENVANTER <span id="inv-limit-text" style="font-size:0.9rem; color:#888;">(0/30)</span></h2>
             <div id="inventory-items" class="grid-container"></div>
+        </div>
+    </div>
+
+    <div id="leaderboard-modal" class="modal">
+        <div class="glass modal-content">
+            <span class="close-modal" onclick="closeLeaderboard()">&times;</span>
+            <h2 style="color:gold; text-align:center;">LİDERLİK TABLOSU</h2>
+            <div id="leaderboard-list" style="margin-top:20px;">
+                </div>
         </div>
     </div>
 
@@ -315,7 +329,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, set, get, update, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        import { getDatabase, ref, set, get, update, onValue, runTransaction, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDUBBEwbyi80Y9qcuM7fhrXN8h-wGipnlU",
@@ -334,13 +348,12 @@
         const LOCAL_P = "v2_gamePass";
 
         let currentUser = null, myScore = 0, canClick = true, userInventory = ['phone1'], currentPhoneId = 'phone1', clickPower = 1, currentWinningPhone = null, currentLuckyType = "normal";
-        let inventoryLimit = 30; // Varsayılan limit
+        let inventoryLimit = 30;
 
-        // --- SES SİSTEMİ ---
         const playClickSound = () => {
             const audio = new Audio('Click.wav');
             audio.currentTime = 0;
-            audio.play().catch(e => console.log("Ses çalınamadı (Etkileşim gerekiyor)"));
+            audio.play().catch(e => {});
         };
 
         const products = [
@@ -392,7 +405,12 @@
             syncStats();
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
-            if(username === "İbrahim Developer" || username === "Admin") document.getElementById('admin-btn').style.display = 'block';
+            
+            // ADMIN KONTROLÜ (İbrahim ve Abdullah Admin)
+            if(username === "İbrahim Developer" || username === "Admin" || username === "Abdullah") {
+                document.getElementById('admin-btn').style.display = 'block';
+            }
+
             localStorage.setItem(LOCAL_U, username);
             localStorage.setItem(LOCAL_P, data.password);
             startListeners();
@@ -464,18 +482,42 @@
         window.openUpgrade = () => { playClickSound(); document.getElementById('upgrade-modal').style.display = 'flex'; };
         window.closeUpgrade = () => { playClickSound(); document.getElementById('upgrade-modal').style.display = 'none'; };
 
+        // LEADERBOARD FONKSİYONLARI
+        window.openLeaderboard = () => {
+            playClickSound();
+            document.getElementById('leaderboard-modal').style.display = 'flex';
+            const listContainer = document.getElementById('leaderboard-list');
+            listContainer.innerHTML = "Yükleniyor...";
+
+            const leadQuery = query(ref(db, DB_PREFIX), orderByChild('score'), limitToLast(10));
+            get(leadQuery).then(snap => {
+                listContainer.innerHTML = "";
+                const data = [];
+                snap.forEach(child => {
+                    data.push({ name: child.key, score: child.val().score });
+                });
+                data.reverse().forEach((user, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'leader-item';
+                    item.innerHTML = `
+                        <span><b>#${index + 1}</b> ${user.name}</span>
+                        <span style="color:#00f260;">$${user.score.toLocaleString()}</span>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            });
+        };
+        window.closeLeaderboard = () => { playClickSound(); document.getElementById('leaderboard-modal').style.display = 'none'; };
+
         function renderStore() {
             const container = document.getElementById('store-items');
             container.innerHTML = "Yükleniyor...";
             onValue(ref(db, 'stocks'), (snap) => {
                 const stocks = snap.val() || {}; container.innerHTML = "";
-                
-                // LUCKY BLOCKS
                 const blocks = [
                     {id: 'luckyblock', name: 'LUCKY BLOCK', img: 'Luckyblock.png', price: 12500, color: 'gold', type:'normal', preview:['Phone2.png','Phone4.png','Phone6.png','Phone7.png']},
                     {id: 'enderlucky', name: 'ENDERD LUCKY', img: 'Luckyblock2.png', price: 25000000, color: '#ff00ff', type:'ender', preview:['Phone8.png','Phone9.png','Phone10.png']}
                 ];
-
                 blocks.forEach(b => {
                     const stock = stocks[b.id] || 0;
                     const card = document.createElement('div');
@@ -487,26 +529,20 @@
                         style="background:${b.color};" onclick="buyLucky('${b.type}')" ${myScore < b.price || stock <= 0 ? 'disabled' : ''}>$${b.price.toLocaleString()} AL</button>`;
                     container.appendChild(card);
                 });
-
                 products.forEach(p => {
                     const stock = stocks[p.id] || 0;
                     const card = document.createElement('div');
                     card.className = 'card';
                     const rarity = getRarityLabel(p.power, p.price);
-                    
                     const isOwned = userInventory.includes(p.id);
                     const isEquiped = (currentPhoneId === p.id);
-
                     let actionBtn = "";
-                    if(isEquiped) {
-                        actionBtn = `<button class="btn-equiped">KUŞANILDI</button>`;
-                    } else if(isOwned) {
-                        actionBtn = `<button class="btn-use" onclick="equipItem('${p.id}')">KUŞAN</button>`;
-                    } else {
+                    if(isEquiped) actionBtn = `<button class="btn-equiped">KUŞANILDI</button>`;
+                    else if(isOwned) actionBtn = `<button class="btn-use" onclick="equipItem('${p.id}')">KUŞAN</button>`;
+                    else {
                         const canAfford = myScore >= p.price && stock > 0;
                         actionBtn = `<button class="${canAfford ? 'btn-buy' : 'btn-locked'}" onclick="buyUniqueItem('${p.id}')" ${!canAfford ? 'disabled' : ''}>$${p.price.toLocaleString()} AL</button>`;
                     }
-
                     card.innerHTML = `${rarity ? `<div class="rarity-tag ${rarity.class}">${rarity.text}</div>` : ""}
                         <img src="${p.img}"><h4>${p.name}</h4><p style="color:#00f260; font-size:0.8rem;">+$${p.power.toLocaleString()}</p>
                         <div style="font-size:0.7rem; color:#888;">Stok: ${stock}</div>
@@ -520,12 +556,9 @@
             const container = document.getElementById('inventory-items');
             container.innerHTML = "";
             document.getElementById('inv-limit-text').innerText = `(${userInventory.length}/${inventoryLimit})`;
-
             if(userInventory.length === 0) { container.innerHTML = "<p>Envanter Boş</p>"; return; }
-
             const itemCounts = {};
             userInventory.forEach(id => itemCounts[id] = (itemCounts[id] || 0) + 1);
-
             Object.keys(itemCounts).forEach(itemId => {
                 const p = products.find(x => x.id === itemId);
                 if(!p) return;
@@ -543,7 +576,7 @@
 
         window.buyUniqueItem = (id) => {
             playClickSound();
-            if(userInventory.length >= inventoryLimit) { alert("Envanter dolu! Lütfen yer açın veya kapasiteyi geliştirin."); return; }
+            if(userInventory.length >= inventoryLimit) { alert("Envanter dolu!"); return; }
             const p = products.find(x => x.id === id);
             if(myScore < p.price) return;
             runTransaction(ref(db, 'stocks/' + id), (s) => (s || 100) > 0 ? s - 1 : 0).then(res => {
@@ -551,7 +584,6 @@
                     myScore -= p.price; 
                     userInventory.push(id);
                     update(ref(db, DB_PREFIX + currentUser), { score: myScore, inventory: userInventory });
-                    renderStore();
                 }
             });
         };
@@ -571,14 +603,11 @@
 
         window.buyInventoryUpgrade = () => {
             playClickSound();
-            if(myScore < 50000000) { alert("Yetersiz bakiye! 50M $ gerekiyor."); return; }
+            if(myScore < 50000000) { alert("50M $ gerekiyor."); return; }
             myScore -= 50000000;
             inventoryLimit += 50;
-            update(ref(db, DB_PREFIX + currentUser), { score: myScore, limit: inventoryLimit }).then(() => {
-                syncStats();
-                alert("Başarıyla geliştirildi! Yeni limit: " + inventoryLimit);
-            });
-        }
+            update(ref(db, DB_PREFIX + currentUser), { score: myScore, limit: inventoryLimit }).then(() => syncStats());
+        };
 
         function startLuckyOpening() {
             const overlay = document.getElementById('lucky-opening-overlay');
@@ -589,7 +618,6 @@
             document.getElementById('won-item-img').style.transform = 'scale(0)';
             document.getElementById('close-lucky-btn').style.display = 'none';
             document.getElementById('lucky-status').innerText = "TIKLA VE AÇ!";
-            
             const rnd = Math.random() * 100;
             if(currentLuckyType === 'normal') {
                 if(rnd <= 50) currentWinningPhone = products[1];
@@ -627,7 +655,6 @@
             document.getElementById('main-phone').src = p.img;
             update(ref(db, DB_PREFIX + currentUser), { currentPhone: id });
             if(document.getElementById('inventory-modal').style.display === 'flex') renderInventory();
-            if(document.getElementById('store-modal').style.display === 'flex') renderStore();
         };
 
         window.sellItemFromInv = (id) => {
@@ -635,19 +662,11 @@
             const index = userInventory.indexOf(id);
             if(index === -1) return;
             const p = products.find(x => x.id === id);
-            if(!p || p.price <= 0) return;
-
             myScore += p.price / 2;
             userInventory.splice(index, 1);
-
-            if(currentPhoneId === id && !userInventory.includes(id)) {
-                currentPhoneId = 'phone1';
-                syncStats();
-            }
-
+            if(currentPhoneId === id && !userInventory.includes(id)) { currentPhoneId = 'phone1'; syncStats(); }
             update(ref(db, DB_PREFIX + currentUser), { score: myScore, inventory: userInventory, currentPhone: currentPhoneId });
             renderInventory(); 
-            updateScoreUI();
         };
 
         function startListeners() {
@@ -664,14 +683,13 @@
             onValue(ref(db, DB_PREFIX + currentUser), snap => {
                 const data = snap.val();
                 if(data) {
-                    if(data.banned) { document.getElementById('ban-screen').style.display = 'flex'; document.getElementById('game-screen').style.display = 'none'; }
+                    if(data.banned) { document.getElementById('ban-screen').style.display = 'flex'; }
                     else { 
                         myScore = data.score || 0; 
                         userInventory = data.inventory || ['phone1'];
                         currentPhoneId = data.currentPhone || 'phone1';
                         inventoryLimit = data.limit || 30;
                         updateScoreUI(); 
-                        document.getElementById('inv-limit-text').innerText = `(${userInventory.length}/${inventoryLimit})`;
                     }
                 }
             });
@@ -682,43 +700,27 @@
             if(u && p) { document.getElementById('username-inp').value = u; document.getElementById('password-inp').value = p; window.handleLogin(); }
         };
 
+        // ADMIN PANEL FONKSİYONLARI
         window.openAdmin = () => { playClickSound(); document.getElementById('admin-modal').style.display = 'flex'; };
         window.closeAdmin = () => { playClickSound(); document.getElementById('admin-modal').style.display = 'none'; };
         window.sendServerMessage = () => {
-            playClickSound();
             const t = document.getElementById('admin-msg-inp').value;
-            if(t) set(ref(db, 'system/broadcast'), { text: "Admin: " + t, img: 'Phone1.png', time: Date.now() });
+            if(t) set(ref(db, 'system/broadcast'), { text: currentUser + ": " + t, img: 'Phone1.png', time: Date.now() });
         };
         window.adminRestock = () => {
-            playClickSound();
             const up = {}; products.forEach(p => up['stocks/'+p.id] = 100);
             up['stocks/luckyblock'] = 100; up['stocks/enderlucky'] = 100;
-            update(ref(db), up).then(() => set(ref(db, 'system/broadcast'), { text: "Stoklar Yenilendi!", img: 'Phone1.png', time: Date.now() }));
+            update(ref(db), up);
         };
         window.giveCash = () => {
-            playClickSound();
             const u = document.getElementById('cash-user').value.trim(), a = parseInt(document.getElementById('cash-amount').value);
             if(u && a) runTransaction(ref(db, DB_PREFIX + u + '/score'), s => (s || 0) + a);
         };
-        
         window.reduceCash = () => {
-            playClickSound();
-            const u = document.getElementById('reduce-cash-user').value.trim();
-            const a = parseInt(document.getElementById('reduce-cash-amount').value);
-            if(u && a) {
-                runTransaction(ref(db, DB_PREFIX + u + '/score'), (s) => {
-                    let newScore = (s || 0) - a;
-                    return newScore < 0 ? 0 : newScore;
-                }).then(() => {
-                    alert(u + " adlı oyuncunun parası azaltıldı.");
-                });
-            } else {
-                alert("Lütfen geçerli kullanıcı adı ve miktar girin.");
-            }
+            const u = document.getElementById('reduce-cash-user').value.trim(), a = parseInt(document.getElementById('reduce-cash-amount').value);
+            if(u && a) runTransaction(ref(db, DB_PREFIX + u + '/score'), s => Math.max(0, (s || 0) - a));
         };
-
         window.banPlayer = (status) => {
-            playClickSound();
             const u = document.getElementById('ban-user').value.trim();
             if(u) update(ref(db, DB_PREFIX + u), { banned: status });
         };
